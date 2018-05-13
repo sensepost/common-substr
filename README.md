@@ -2,6 +2,7 @@
 Simple awk script to extract the most common substrings from an input text. Built for password cracking.
 
 # Usage
+```
 Common Substring Generator by @singe
 Usage: ./common-substr.sh [-hin] [-t <n>] [-l <n>] -f <filename>
 	-h|--help This help
@@ -12,6 +13,7 @@ Usage: ./common-substr.sh [-hin] [-t <n>] [-l <n>] -f <filename>
 	-f|--file <filename> The file to extract substrings from
 Default output (with stats) is tab separated: <percentage>	<count>	<substring>
 Sorted from most to least common
+```
 
 # Examples
 
