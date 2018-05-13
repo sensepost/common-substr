@@ -13,7 +13,7 @@ threshold=0
 
 function longusage() {
   echo "Common Substring Generator by @singe"
-  echo "Usage: $0 [-hin] [-l <n>] -f <filename>"
+  echo "Usage: $0 [-hin] [-t <n>] [-l <n>] -f <filename>"
   echo "	-h|--help This help"
   echo "	-i|--insensitive Ignore case of substrings"
   echo "	-l|--length <n> Maximum length substring to look for. Default is $strlen."
