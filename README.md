@@ -33,3 +33,16 @@ Do the same, but suppress printing of stats:
 23
 34
 ```
+An example use for password cracking. Assuming you've put already cracked clear-text passwords in a file called 'passwords':
+```
+./common-substr.sh -t 1 -l 27 -n -f passwords > substrs
+# Limit substrings to a max length of 27 and only include those which occur
+# more than 1% of the time
+sort -u passwords > uniques
+hashcat -a1 hashes uniques substrs 
+```
+It also helps to create "base words" and combine those with the substrings:
+```
+grep -oi "^[a-z]*" uniques > basewords
+hashcat -a1 hashes basewords substrs
+```
