@@ -59,8 +59,12 @@ NR > 0 {
     str = tolower($1)
   else
     str = $1
+  if(length(str) < strlen)
+    tmplen = length(str)
+  else
+    tmplen = strlen
   for(i = length(str); i >= 1; i--)
-    for(j = strlen; j > 1; j--)
+    for(j = tmplen; j > 1; j--)
       if(length(substr(str, i, j)) == j)
         subs[substr(str, i, j)]++
 }
