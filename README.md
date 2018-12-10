@@ -15,34 +15,72 @@ Default output (with stats) is tab separated: <percentage>	<count>	<substring>
 Sorted from most to least common
 ```
 
-# Examples
+# Simple Usage Examples
 
-Create a test file:
+Given the test file:
 ```
-echo -e "123\n234\n345" > test
+123
+123
+234
 ```
-Find the most common substrings:
+
+We can find the most common substrings:
 ```
 ./common-substr.sh -f test
-66.6667	2	23
-66.6667	2	34
+100	3	23
+66.6667	2	12
+66.6667	2	123
 ```
+Read this output as "100% of the input file had the substring "23" which consisted of 3 instances".
+
 Do the same, but suppress printing of stats:
 ```
-./common-substr.sh -n -f test
+./common-substr.sh -f test -n
 23
-34
+12
+123
 ```
+
+Only include substrings that occur at least 70% of the time:
+```
+./common-substr.sh -f test -t 70
+100	3	23
+```
+
+The stats are tab-separated, to make cut'ing easy:
+```
+./common-substr.sh -f test > output
+cut -f 3 output
+23
+12
+123
+```
+
+# Password Cracking Examples
+
 An example use for password cracking. Assuming you've put already cracked clear-text passwords in a file called 'passwords':
 ```
-./common-substr.sh -t 1 -l 27 -n -f passwords > substrs
 # Limit substrings to a max length of 27 and only include those which occur
-# more than 1% of the time
+# at least 1% or more of the time
+./common-substr.sh -t 1 -l 27 -n -f passwords > substrs
+
+
 sort -u passwords > uniques
 hashcat -a1 hashes uniques substrs 
 ```
+
 It also helps to create "base words" and combine those with the substrings:
 ```
-grep -oi "^[a-z]*" uniques > basewords
+grep -oi "[a-z]*[a-z]" uniques > basewords
 hashcat -a1 hashes basewords substrs
+```
+Remember to try it the other way around too:
+```
+hashcat -a1 hashes substrs basewords
+```
+
+Drop the threshold and throw the full list of substrings into combinator:
+```
+./common-substr.sh -n -f passwords > all-substrs
+hashcat -a1 hashes all-substrs all-substrs
 ```
