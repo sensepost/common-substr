@@ -72,7 +72,7 @@ END {
   asorti(subs,wubs,"@val_num_desc")
   for(i in wubs)
     if(subs[wubs[i]] > 1)
-      if(subs[wubs[i]]/NR*100 > threshold)
+      if(subs[wubs[i]]/NR*100 >= threshold)
         if(stats)
           printf("%s\t%s\t%s\n", subs[wubs[i]]/NR*100, subs[wubs[i]], wubs[i])
         else
