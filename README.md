@@ -8,6 +8,7 @@ Usage: ./common-substr.sh [-hin] [-t <n>] [-l <n>] -f <filename>
 	-h|--help This help
 	-i|--insensitive Ignore case of substrings
 	-l|--length <n> Maximum length substring to look for. Default is 32.
+  -s|--minlength <n> Minimum length substring to look for. Default is 2 (aka >1)."
 	-n|--nostats Just print the substrings, no stats. Default is to include them.
 	-t|--threshold <n> Only print substrings more prevalent than <n> percent.
 	-f|--file <filename> The file to extract substrings from
@@ -27,9 +28,9 @@ Given the test file:
 We can find the most common substrings:
 ```
 ./common-substr.sh -f test
-100	3	23
-66.6667	2	12
-66.6667	2	123
+100     3 23
+66.6667 2 12
+66.6667 2 123
 ```
 Read this output as "100% of the input file had the substring "23" which consisted of 3 instances".
 
@@ -54,6 +55,19 @@ cut -f 3 output
 23
 12
 123
+```
+
+Only include substrings *longer* than 2 characters:
+```
+./common-substr.sh -f test -s 2 
+66.6667 2 123
+```
+
+Only include substrings *shorter* than 2 characters:
+```
+./common-substr.sh -f test -s 2 
+100     3 23
+66.6667 2 12
 ```
 
 # Password Cracking Examples

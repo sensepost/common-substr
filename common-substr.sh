@@ -7,7 +7,8 @@
 
 nocase=0
 stats=1
-strlen=32
+strmax=32
+strmin=1
 threshold=0
 # I use 32 as the length, since that's what hashcat -O's max is
 
@@ -16,7 +17,8 @@ function longusage() {
   echo "Usage: $0 [-hin] [-t <n>] [-l <n>] -f <filename>"
   echo "	-h|--help This help"
   echo "	-i|--insensitive Ignore case of substrings"
-  echo "	-l|--length <n> Maximum length substring to look for. Default is $strlen."
+  echo "	-l|--maxlength <n> Maximum length substring to look for. Default is $strmax."
+  echo "	-s|--minlength <n> Minimum length substring to look for. Default is $strmax."
   echo "	-n|--nostats Just print the substrings, no stats. Default is to include them."
   echo "	-t|--threshold <n> Only print substrings more prevalent than <n> percent."
   echo "	-f|--file <filename> The file to extract substrings from"
@@ -31,7 +33,7 @@ function shortusage() {
   exit 1
 }
 
-while getopts ":hinl:t:f:" OPTIONS; do
+while getopts ":hinl:s:t:f:" OPTIONS; do
   case "$OPTIONS" in
     h|-help)
       longusage;;
@@ -39,8 +41,13 @@ while getopts ":hinl:t:f:" OPTIONS; do
       nocase=1;;
     n|-nostats)
       stats=0;;
-    l|-length)
-      strlen=${OPTARG};;
+    l|-minlength)
+      strmax=${OPTARG};;
+    s|-maxlength)
+      if [ ${OPTARG} -lt 1 ]; then
+        echo "Minimum lengths of less than 1 aren't useful. Make sure you know what you're doing."
+      fi
+      strmin=${OPTARG};;
     t|-threshold)
       threshold=${OPTARG};;
     f|-file)
@@ -53,18 +60,18 @@ if [ $OPTIND -eq 1 ]; then
   shortusage
 fi
 
-LC_ALL=C awk -v strlen="$strlen" -v nocase="$nocase" -v stats="$stats" -v threshold="$threshold" '
+LC_ALL=C awk -v strmax="$strmax" -v strmin="$strmin" -v nocase="$nocase" -v stats="$stats" -v threshold="$threshold" '
 NR > 0 {
   if(nocase)
     str = tolower($1)
   else
     str = $1
-  if(length(str) < strlen)
-    tmplen = length(str)
+  if(length(str) < strmax)
+    maxlen = length(str)
   else
-    tmplen = strlen
+    maxlen = strmax
   for(i = length(str); i >= 1; i--)
-    for(j = tmplen; j > 1; j--)
+    for(j = maxlen; j > strmin; j--)
       if(length(substr(str, i, j)) == j)
         subs[substr(str, i, j)]++
 }
