@@ -8,7 +8,7 @@ Usage: ./common-substr.sh [-hin] [-t <n>] [-l <n>] -f <filename>
 	-h|--help This help
 	-i|--insensitive Ignore case of substrings
 	-l|--length <n> Maximum length substring to look for. Default is 32.
-  -s|--minlength <n> Minimum length substring to look for. Default is 2 (aka >1)."
+	-s|--minlength <n> Minimum length substring to look for. Default is 2 (aka >1)."
 	-n|--nostats Just print the substrings, no stats. Default is to include them.
 	-t|--threshold <n> Only print substrings more prevalent than <n> percent.
 	-f|--file <filename> The file to extract substrings from
