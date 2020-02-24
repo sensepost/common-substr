@@ -7,10 +7,10 @@
 
 nocase=0
 stats=1
-strmax=32
+strmax=32 # I use 32 because it's hashcat -O's max
 strmin=1
 threshold=0
-# I use 32 as the length, since that's what hashcat -O's max is
+focus=0
 
 function longusage() {
   echo "Common Substring Generator by @singe"
@@ -22,6 +22,8 @@ function longusage() {
   echo "	-n|--nostats Just print the substrings, no stats. Default is to include them."
   echo "	-t|--threshold <n> Only print substrings more prevalent than <n> percent."
   echo "	-f|--file <filename> The file to extract substrings from"
+  echo "	-e|--end Only look at suffix substrings at the end of a string"
+  echo "	-b|--begin Only look at prefix substrings at the beginning of a string"
   echo "Default output (with stats) is tab separated: <percentage>	<count>	<substring>"
   echo "Sorted from most to least common"
   exit 1
@@ -33,7 +35,7 @@ function shortusage() {
   exit 1
 }
 
-while getopts ":hinl:s:t:f:" OPTIONS; do
+while getopts ":hinl:s:t:f:eb" OPTIONS; do
   case "$OPTIONS" in
     h|-help)
       longusage;;
@@ -52,6 +54,10 @@ while getopts ":hinl:s:t:f:" OPTIONS; do
       threshold=${OPTARG};;
     f|-file)
       filename=${OPTARG};;
+    e|-end)
+      focus=1;;
+    b|-begin)
+      focus=2;;
     ?)
       shortusage;;
     esac
@@ -60,7 +66,7 @@ if [ $OPTIND -eq 1 ]; then
   shortusage
 fi
 
-LC_ALL=C awk -v strmax="$strmax" -v strmin="$strmin" -v nocase="$nocase" -v stats="$stats" -v threshold="$threshold" '
+LC_ALL=C awk -v strmax="$strmax" -v strmin="$strmin" -v nocase="$nocase" -v stats="$stats" -v threshold="$threshold" -v focus="$focus" '
 NR > 0 {
   if(nocase)
     str = tolower($1)
@@ -70,10 +76,27 @@ NR > 0 {
     maxlen = length(str)
   else
     maxlen = strmax
-  for(i = length(str); i >= 1; i--)
+  if(focus == 0)
+  {
+    for(i = length(str); i >= 1; i--)
+      for(j = maxlen; j > strmin; j--)
+        if(length(substr(str, i, j)) == j)
+          subs[substr(str, i, j)]++
+  }
+  if(focus == 1)
+  {
+    j = length(str)
+    for(i = 1; i <= j; i++)
+      if(length(substr(str, i, j)) > strmin)
+        subs[substr(str, i, j)]++
+  }
+  if(focus == 2)
+  {
+    i=0
     for(j = maxlen; j > strmin; j--)
       if(length(substr(str, i, j)) == j)
         subs[substr(str, i, j)]++
+  }
 }
 END {
   asorti(subs,wubs,"@val_num_desc")
