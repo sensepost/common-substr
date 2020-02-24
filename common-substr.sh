@@ -14,7 +14,7 @@ focus=0
 
 function longusage() {
   echo "Common Substring Generator by @singe"
-  echo "Usage: $0 [-hin] [-t <n>] [-l <n>] -f <filename>"
+  echo "Usage: $0 [-hinsp] [-t <n>] [-l <n>] [-L <n>] -f <filename>"
   echo "	-h|--help This help"
   echo "	-i|--insensitive Ignore case of substrings"
   echo "	-L|--maxlength <n> Maximum length substring to look for. Default is $strmax."
@@ -31,7 +31,7 @@ function longusage() {
 
 function shortusage() {
   echo "Common Substring Generator by @singe"
-  echo "Usage: $0 [-hin] [-l <n>] -f <filename>"
+  echo "Usage: $0 [-hinsp] [-t <n>] [-l <n>] [-L <n>] -f <filename>"
   exit 1
 }
 

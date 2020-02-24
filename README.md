@@ -4,14 +4,16 @@ Simple awk script to extract the most common substrings from an input text. Buil
 # Usage
 ```
 Common Substring Generator by @singe
-Usage: ./common-substr.sh [-hin] [-t <n>] [-l <n>] -f <filename>
+Usage: ./common-substr.sh [-hinsp] [-t <n>] [-l <n>] [-L <n>] -f <filename>
 	-h|--help This help
 	-i|--insensitive Ignore case of substrings
-	-l|--length <n> Maximum length substring to look for. Default is 32.
-	-s|--minlength <n> Minimum length substring to look for. Default is 2 (aka >1)."
+	-L|--maxlength <n> Maximum length substring to look for. Default is 32.
+	-l|--minlength <n> Minimum length substring to look for. Default is 2.
 	-n|--nostats Just print the substrings, no stats. Default is to include them.
 	-t|--threshold <n> Only print substrings more prevalent than <n> percent.
 	-f|--file <filename> The file to extract substrings from
+	-s|--suffix Only look at suffix substrings at the end of a string
+	-p|--prefix Only look at prefix substrings at the beginning of a string
 Default output (with stats) is tab separated: <percentage>	<count>	<substring>
 Sorted from most to least common
 ```
@@ -57,17 +59,31 @@ cut -f 3 output
 123
 ```
 
-Only include substrings *longer* than 2 characters:
+Only include substrings 3 characters or longer:
 ```
-./common-substr.sh -f test -s 2 
+./common-substr.sh -f test -l 3 
 66.6667 2 123
 ```
 
-Only include substrings *shorter* than 2 characters:
+Only include substrings 2 characters or shorter:
 ```
-./common-substr.sh -f test -s 2 
+./common-substr.sh -f test -L 2 
 100     3 23
 66.6667 2 12
+```
+
+Only include the start of the strings (prefix):
+```
+./common-substr.sh -f test -p
+66.6667	2	12
+66.6667	2	123
+```
+
+Only include the end of the strings (suffix):
+```
+./common-substr.sh -f test -s
+66.6667	2	23
+66.6667	2	123
 ```
 
 # Password Cracking Examples
