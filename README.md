@@ -129,7 +129,7 @@ Take the commons starts and ends of passwords and combine them:
 hashcat -a1 hashes prefix suffix
 ```
 
-## Building
+# Building
 
 The golang version can be built using `go build ./common-substr.go`.
 
