@@ -1,5 +1,5 @@
 # common-substr
-Simple tool to extract the most common substrings from an input text. Built for password cracking.
+Simple tool to extract the most common substrings from an input text. Built for password cracking. A write-up on the theory can be found [at the sensepost.com blog](https://sensepost.com/blog/2018/cracking-efficiency-measurements-common-substring-attack/)
 
 There are two versions, the older awk script and the newer & faster golang version. They use the same commandline switches.
 
